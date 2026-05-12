@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MedBase — Enciclopédia Médica</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/componentes.css" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="js/config.js"></script>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header__inner">
+      <a href="index.html" class="logo">
+        <div class="logo__icone"><i data-lucide="stethoscope"></i></div>
+        <span class="logo__nome">Med<span>Base</span></span>
+      </a>
+      <nav class="header__nav">
+        <a href="index.html">Início</a>
+        <a href="index.html#secoes">Módulos</a>
+        <a href="historico.html">Histórico</a>
+      </nav>
+      <button class="tema-toggle" id="temaToggle" title="Alternar tema">
+        <i data-lucide="sun" id="icone-claro" class="oculto"></i>
+        <i data-lucide="moon" id="icone-escuro"></i>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container--estreito">
+        <p class="hero__label">v3.0 — Fase 3</p>
+        <h1 class="hero__titulo">
+          Enciclopédia<br/>
+          <span class="texto-azul">Médica</span> Interativa
+        </h1>
+        <p class="hero__desc">
+          Pesquise fórmulas químicas, medicamentos, doenças e
+          história da medicina em uma única plataforma.
+        </p>
+
+        <div class="busca" id="busca">
+          <div class="busca__seletor">
+            <button class="busca__tipo ativo" data-tipo="formula">
+              <i data-lucide="flask-conical"></i> Fórmula
+            </button>
+            <button class="busca__tipo" data-tipo="medicamento">
+              <i data-lucide="pill"></i> Medicamento
+            </button>
+            <button class="busca__tipo" data-tipo="doenca">
+              <i data-lucide="microscope"></i> Doença
+            </button>
+            <button class="busca__tipo" data-tipo="historia">
+              <i data-lucide="book-open"></i> História
+            </button>
+          </div>
+
+          <div class="busca__linha">
+            <input type="text" class="busca__input" id="campoBusca"
+              placeholder="Ex: C6H12O6" autocomplete="off" spellcheck="false" />
+            <button class="busca__btn" id="btnBuscar">
+              <i data-lucide="search"></i> Buscar
+            </button>
+          </div>
+
+          <p id="mensagemErro" class="oculto texto-erro"
+             style="font-size:0.85rem;font-family:var(--fonte-codigo);margin-top:4px;"></p>
+
+          <div class="busca__exemplos" id="exemplos"><span>Tente:</span></div>
+        </div>
+
+        <div id="secaoHistorico" class="oculto" style="margin-top:24px;text-align:left;">
+          <p class="mono texto-fraco" style="font-size:0.75rem;margin-bottom:8px;">// pesquisas recentes</p>
+          <div id="listaHistorico" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="secoes" style="padding-bottom:80px;">
+      <div class="container">
+        <p class="mono texto-fraco" style="font-size:0.8rem;margin-bottom:16px;">// módulos disponíveis</p>
+        <div class="nav-cards">
+          <a href="#busca" class="nav-card" id="cardFormula">
+            <div class="nav-card__icone"><i data-lucide="flask-conical"></i></div>
+            <div class="nav-card__titulo">Fórmulas Químicas</div>
+            <div class="nav-card__desc">Pesquise compostos por fórmula molecular.</div>
+          </a>
+          <a href="#busca" class="nav-card" id="cardMedicamento">
+            <div class="nav-card__icone"><i data-lucide="pill"></i></div>
+            <div class="nav-card__titulo">Medicamentos</div>
+            <div class="nav-card__desc">Bulas e dados oficiais da FDA.</div>
+          </a>
+          <a href="#busca" class="nav-card" id="cardDoenca">
+            <div class="nav-card__icone"><i data-lucide="microscope"></i></div>
+            <div class="nav-card__titulo">Doenças</div>
+            <div class="nav-card__desc">Enciclopédia de doenças via Wikipedia.</div>
+          </a>
+          <a href="#busca" class="nav-card" id="cardHistoria">
+            <div class="nav-card__icone"><i data-lucide="book-open"></i></div>
+            <div class="nav-card__titulo">História</div>
+            <div class="nav-card__desc">Da medicina antiga às descobertas modernas.</div>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>MedBase · Dados: PubChem, OpenFDA, Wikipedia · Projeto de portfólio</p>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/busca.js"></script>
+  <script>
+    lucide.createIcons()
+
+    const temaToggle  = document.getElementById("temaToggle")
+    const iconeClaro  = document.getElementById("icone-claro")
+    const iconeEscuro = document.getElementById("icone-escuro")
+
+    function sincronizarIconeTema() {
+      const tema = document.documentElement.getAttribute("data-theme")
+      iconeClaro.classList.toggle("oculto", tema !== "light")
+      iconeEscuro.classList.toggle("oculto", tema === "light")
+    }
+
+    temaToggle.addEventListener("click", () => {
+      const novo = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light"
+      document.documentElement.setAttribute("data-theme", novo)
+      localStorage.setItem("medbase_tema", novo)
+      sincronizarIconeTema()
+      lucide.createIcons()
+    })
+
+    sincronizarIconeTema()
+  </script>
+</body>
+</html>

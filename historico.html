@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MedBase — Histórico</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/componentes.css" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="js/config.js"></script>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header__inner">
+      <a href="index.html" class="logo">
+        <div class="logo__icone"><i data-lucide="stethoscope"></i></div>
+        <span class="logo__nome">Med<span>Base</span></span>
+      </a>
+      <nav class="header__nav">
+        <a href="index.html">Início</a>
+        <a href="index.html#secoes">Módulos</a>
+        <a href="historico.html">Histórico</a>
+      </nav>
+      <button class="tema-toggle" id="temaToggle" title="Alternar tema">
+        <i data-lucide="sun" id="icone-claro" class="oculto"></i>
+        <i data-lucide="moon" id="icone-escuro"></i>
+      </button>
+    </div>
+  </header>
+
+  <main style="padding: 40px 0 80px;">
+    <div class="container--estreito">
+
+      <!-- Cabeçalho da página -->
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:32px;">
+        <div>
+          <p class="mono texto-fraco" style="font-size:0.8rem; margin-bottom:4px;">// pesquisas recentes</p>
+          <h1 style="font-size:1.6rem; font-weight:600;">Histórico</h1>
+        </div>
+        <button id="btnLimpar" class="btn-externo" style="color:var(--cor-vermelho); border-color:var(--cor-vermelho);">
+          <i data-lucide="trash-2"></i> Limpar
+        </button>
+      </div>
+
+      <!-- Loading -->
+      <div id="loading" class="skeleton-card">
+        <span class="skeleton skeleton--titulo" style="width:40%; margin-bottom:12px;"></span>
+        <span class="skeleton skeleton--texto"></span>
+        <span class="skeleton skeleton--texto"></span>
+        <span class="skeleton skeleton--texto skeleton--texto-curto"></span>
+      </div>
+
+      <!-- Vazio -->
+      <div id="vazio" class="oculto" style="text-align:center; padding: 60px 0;">
+        <i data-lucide="clock" style="width:48px; height:48px; color:var(--cor-texto-fraco); margin-bottom:16px;"></i>
+        <p style="color:var(--cor-texto-suave); font-size:0.95rem;">Nenhuma pesquisa realizada ainda.</p>
+        <a href="index.html" class="busca__btn" style="display:inline-block; margin-top:20px; text-decoration:none;">
+          Fazer primeira busca
+        </a>
+      </div>
+
+      <!-- Lista de histórico -->
+      <div id="listaHistorico" class="oculto"></div>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>MedBase · Projeto de portfólio</p>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/historico.js"></script>
+  <script>
+    lucide.createIcons()
+
+    // Toggle de tema
+    const temaToggle  = document.getElementById("temaToggle")
+    const iconeClaro  = document.getElementById("icone-claro")
+    const iconeEscuro = document.getElementById("icone-escuro")
+
+    function sincronizarIconeTema() {
+      const tema = document.documentElement.getAttribute("data-theme")
+      iconeClaro.classList.toggle("oculto", tema !== "light")
+      iconeEscuro.classList.toggle("oculto", tema === "light")
+    }
+
+    temaToggle.addEventListener("click", () => {
+      const novo = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light"
+      document.documentElement.setAttribute("data-theme", novo)
+      localStorage.setItem("medbase_tema", novo)
+      sincronizarIconeTema()
+      lucide.createIcons()
+    })
+
+    sincronizarIconeTema()
+  </script>
+</body>
+</html>

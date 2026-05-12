@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MedBase — Página não encontrada</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/componentes.css" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="js/config.js"></script>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header__inner">
+      <a href="index.html" class="logo">
+        <div class="logo__icone"><i data-lucide="stethoscope"></i></div>
+        <span class="logo__nome">Med<span>Base</span></span>
+      </a>
+    </div>
+  </header>
+
+  <main style="padding: 80px 0; text-align: center;">
+    <div class="container--estreito">
+
+      <!-- Código 404 estilizado -->
+      <p class="mono" style="
+        font-size: 6rem;
+        font-weight: 700;
+        color: var(--cor-azul);
+        line-height: 1;
+        margin-bottom: 8px;
+        opacity: 0.3;
+      ">404</p>
+
+      <h1 style="font-size: 1.5rem; margin-bottom: 12px;">
+        Página não encontrada
+      </h1>
+
+      <p style="
+        color: var(--cor-texto-suave);
+        font-size: 0.95rem;
+        max-width: 380px;
+        margin: 0 auto 32px;
+        line-height: 1.7;
+      ">
+        A página que você procura não existe ou foi movida.
+        Volte para a página inicial e tente novamente.
+      </p>
+
+      <!-- Ações -->
+      <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+        <a href="index.html" class="busca__btn" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+          <i data-lucide="home"></i> Voltar ao início
+        </a>
+        <a href="javascript:history.back()" class="btn-externo" style="display: inline-flex; align-items: center; gap: 8px;">
+          <i data-lucide="arrow-left"></i> Página anterior
+        </a>
+      </div>
+
+      <!-- Sugestões rápidas -->
+      <div style="margin-top: 48px;">
+        <p class="mono texto-fraco" style="font-size: 0.75rem; margin-bottom: 12px;">// ou pesquise diretamente</p>
+        <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+          <a href="index.html?tipo=formula" class="exemplo-tag">C6H12O6</a>
+          <a href="index.html?tipo=medicamento" class="exemplo-tag">Aspirin</a>
+          <a href="index.html?tipo=doenca" class="exemplo-tag">Diabetes</a>
+          <a href="index.html?tipo=historia" class="exemplo-tag">Hippocrates</a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>MedBase · Projeto de portfólio</p>
+  </footer>
+
+  <script>lucide.createIcons()</script>
+</body>
+</html>
