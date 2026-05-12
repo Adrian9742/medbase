@@ -1,0 +1,30 @@
+# ─── Banco de dados ───────────────────────
+backend/database/medbase.db
+
+# ─── Variáveis de ambiente ────────────────
+backend/.env
+.env
+
+# ─── Python ───────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+
+# ─── Ambientes virtuais ───────────────────
+venv/
+.venv/
+env/
+
+# ─── Sistema operacional ──────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ─── Editores ─────────────────────────────
+.vscode/
+.idea/
+*.swp

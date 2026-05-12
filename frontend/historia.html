@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MedBase — História</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/componentes.css" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="js/config.js"></script>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header__inner">
+      <a href="index.html" class="logo">
+        <div class="logo__icone"><i data-lucide="stethoscope"></i></div>
+        <span class="logo__nome">Med<span>Base</span></span>
+      </a>
+      <a href="index.html" class="btn-externo">
+        <i data-lucide="arrow-left"></i> Nova busca
+      </a>
+    </div>
+  </header>
+
+  <main style="padding: 40px 0 80px;">
+    <div class="container--estreito">
+
+      <!-- Skeleton loading -->
+      <div id="loading" class="skeleton-card">
+        <div class="skeleton-card__topo">
+          <div class="skeleton-card__info">
+            <span class="skeleton skeleton--badge"></span>
+            <span class="skeleton skeleton--titulo"></span>
+            <span class="skeleton skeleton--sub"></span>
+          </div>
+          <div class="skeleton skeleton--imagem"></div>
+        </div>
+        <span class="skeleton skeleton--texto"></span>
+        <span class="skeleton skeleton--texto"></span>
+        <span class="skeleton skeleton--texto skeleton--texto-curto"></span>
+        <span class="skeleton skeleton--texto"></span>
+      </div>
+
+      <!-- Erro -->
+      <div id="erro" class="erro-card oculto">
+        <div class="erro-card__icone"><i data-lucide="triangle-alert"></i></div>
+        <p class="erro-card__titulo">Não encontrado</p>
+        <p class="erro-card__mensagem" id="erroMensagem"></p>
+        <button class="erro-card__btn" onclick="window.location.href='index.html'">
+          Tentar novamente
+        </button>
+      </div>
+
+      <!-- Resultado -->
+      <div id="resultado" class="resultado-card oculto">
+
+        <div class="resultado-card__topo">
+          <div class="resultado-card__info">
+            <span class="badge badge--azul">
+              <i data-lucide="book-open"></i> História da Medicina
+            </span>
+            <h1 class="resultado-card__nome" id="h-titulo"></h1>
+          </div>
+          <img id="h-imagem" class="resultado-card__imagem" src="" alt="Imagem" style="display:none;" />
+        </div>
+
+        <!-- Aviso idioma -->
+        <div id="h-aviso-idioma" class="aviso-idioma oculto">
+          <i data-lucide="info"></i>
+          Artigo não encontrado em português — exibindo versão em inglês.
+        </div>
+
+        <div style="padding: 20px 28px; border-bottom: 1px solid var(--cor-borda-suave);">
+          <p id="h-resumo" style="font-size:0.9rem; line-height:1.8; color:var(--cor-texto-suave);"></p>
+        </div>
+
+        <div class="resultado-card__rodape">
+          <a id="h-link" href="#" target="_blank" class="btn-externo">
+            <i data-lucide="external-link"></i> Ver na Wikipedia
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>MedBase · Dados: Wikipedia · Projeto de portfólio</p>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/historia.js"></script>
+  <script>lucide.createIcons()</script>
+</body>
+</html>
