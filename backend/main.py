@@ -26,7 +26,11 @@ cors_origem = os.getenv("CORS_ORIGEM", "*")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[cors_origem, "http://localhost:5500", "http://127.0.0.1:5500"],
+    allow_origins=[
+        "https://adrian9742.github.io",
+        "http://localhost:5500",
+        "http://127.0.0.1:5500"
+    ],
     allow_methods=["*"],
     allow_headers=["*"],
 )
