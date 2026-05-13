@@ -4,7 +4,7 @@
 // ─────────────────────────────────────────
 
 const CONFIG = {
-  API_URL: "https://medbase-api.onrender.com",
+  API_URL: "https://medbase-bbct.onrender.com",
   TEMA_PADRAO:   "light",
   MAX_HISTORICO: 10,
 }
