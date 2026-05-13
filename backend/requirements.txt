@@ -1,3 +1,6 @@
 fastapi
 uvicorn
 httpx
+aiosqlite
+wikipedia-api
+python-dotenv
