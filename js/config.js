@@ -4,7 +4,7 @@
 // ─────────────────────────────────────────
 
 const CONFIG = {
-  API_URL:       "http://localhost:8000",
+  API_URL: "https://medbase-api.onrender.com",
   TEMA_PADRAO:   "light",
   MAX_HISTORICO: 10,
 }
