@@ -116,7 +116,13 @@ btnLimpar.addEventListener("click", async () => {
     mostrar(elVazio)
     lucide.createIcons()
   } catch (e) {
-    alert("Erro ao limpar histórico.")
+    // Mostra erro inline sem alert()
+    const erroEl = document.createElement("p")
+    erroEl.className = "texto-erro mono"
+    erroEl.style.cssText = "font-size:0.85rem; margin-top:12px; text-align:center;"
+    erroEl.textContent = "Erro ao limpar histórico. Tente novamente."
+    document.querySelector(".container--estreito").appendChild(erroEl)
+    setTimeout(() => erroEl.remove(), 3000)
   }
 })
 
