@@ -369,3 +369,92 @@ code, .mono {
   width: 16px;
   height: 16px;
 }
+
+/* ───────────────────────────────────────────
+   HEADER — TEMA CLARO
+─────────────────────────────────────────── */
+
+[data-theme="light"] .header {
+  background: rgba(255, 255, 255, 0.95);
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+[data-theme="light"] .header__nav a {
+  color: var(--cor-texto-suave);
+}
+
+[data-theme="light"] .header__nav a:hover {
+  color: var(--cor-texto);
+  background: var(--cor-superficie);
+}
+
+/* Logo — ícone sempre branco sobre fundo verde */
+.logo__icone {
+  background: var(--cor-azul);
+  color: #FFFFFF !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo__icone svg {
+  width: 16px;
+  height: 16px;
+  color: #FFFFFF;
+  stroke: #FFFFFF;
+}
+
+/* ───────────────────────────────────────────
+   ABAS DE BUSCA — ALINHAMENTO DE ÍCONES
+─────────────────────────────────────────── */
+
+.busca__tipo {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.busca__tipo svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
+
+.busca__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.busca__btn svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* ───────────────────────────────────────────
+   CAMPO DE BUSCA — POLIMENTO
+─────────────────────────────────────────── */
+
+.busca__input {
+  height: 52px;
+  font-size: 1rem;
+}
+
+.busca__btn {
+  height: 52px;
+  padding: 0 28px;
+  font-size: 0.95rem;
+}
+
+.busca__seletor {
+  padding: 5px;
+}
+
+.busca__tipo {
+  padding: 7px 18px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
