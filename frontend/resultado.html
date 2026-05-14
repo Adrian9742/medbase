@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MedBase — Resultado</title>
-  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="favicon.png" type="image/png" />
   <link rel="stylesheet" href="css/main.css" />
   <link rel="stylesheet" href="css/componentes.css" />
   <!-- Lucide Icons — obrigatório antes dos scripts que chamam lucide.createIcons() -->
@@ -20,9 +20,20 @@
         <div class="logo__icone"><i data-lucide="stethoscope"></i></div>
         <span class="logo__nome">Med<span>Base</span></span>
       </a>
-      <a href="index.html" class="btn-externo">
-        <i data-lucide="arrow-left"></i> Nova busca
-      </a>
+      <nav class="header__nav">
+        <a href="index.html">Início</a>
+        <a href="index.html#secoes">Módulos</a>
+        <a href="historico.html">Histórico</a>
+      </nav>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <a href="index.html" class="btn-externo">
+          <i data-lucide="arrow-left"></i> Nova busca
+        </a>
+        <button class="tema-toggle" id="temaToggle" title="Alternar tema">
+          <i data-lucide="sun" id="icone-claro" class="oculto"></i>
+          <i data-lucide="moon" id="icone-escuro"></i>
+        </button>
+      </div>
     </div>
   </header>
 
@@ -162,6 +173,24 @@
 
   <script src="js/api.js"></script>
   <script src="js/resultado.js"></script>
-  <script>lucide.createIcons()</script>
+  <script>
+    lucide.createIcons()
+    const temaToggle  = document.getElementById("temaToggle")
+    const iconeClaro  = document.getElementById("icone-claro")
+    const iconeEscuro = document.getElementById("icone-escuro")
+    function sincronizarIconeTema() {
+      const tema = document.documentElement.getAttribute("data-theme")
+      iconeClaro.classList.toggle("oculto", tema !== "light")
+      iconeEscuro.classList.toggle("oculto", tema === "light")
+    }
+    temaToggle.addEventListener("click", () => {
+      const novo = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light"
+      document.documentElement.setAttribute("data-theme", novo)
+      localStorage.setItem("medbase_tema", novo)
+      sincronizarIconeTema()
+      lucide.createIcons()
+    })
+    sincronizarIconeTema()
+  </script>
 </body>
 </html>
