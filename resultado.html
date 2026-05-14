@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MedBase — Resultado</title>
-  <link rel="icon" href="favicon.png" type="image/png" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="css/main.css" />
   <link rel="stylesheet" href="css/componentes.css" />
   <!-- Lucide Icons — obrigatório antes dos scripts que chamam lucide.createIcons() -->
@@ -107,7 +107,7 @@
           </div>
         </div>
 
-        <div class="accordion">
+        <div class="accordion" id="acc-indicacoes">
           <button class="accordion__cabecalho">
             <span class="accordion__titulo">
               <i data-lucide="clipboard-list"></i> Indicações de uso
@@ -117,7 +117,7 @@
           <div class="accordion__conteudo"><p id="m-indicacoes"></p></div>
         </div>
 
-        <div class="accordion">
+        <div class="accordion" id="acc-dosagem">
           <button class="accordion__cabecalho">
             <span class="accordion__titulo">
               <i data-lucide="syringe"></i> Dosagem
@@ -127,7 +127,7 @@
           <div class="accordion__conteudo"><p id="m-dosagem"></p></div>
         </div>
 
-        <div class="accordion">
+        <div class="accordion" id="acc-avisos">
           <button class="accordion__cabecalho">
             <span class="accordion__titulo">
               <i data-lucide="triangle-alert"></i> Avisos
@@ -137,7 +137,7 @@
           <div class="accordion__conteudo"><p id="m-avisos"></p></div>
         </div>
 
-        <div class="accordion">
+        <div class="accordion" id="acc-contraindicacoes">
           <button class="accordion__cabecalho">
             <span class="accordion__titulo">
               <i data-lucide="ban"></i> Contraindicações
@@ -147,7 +147,7 @@
           <div class="accordion__conteudo"><p id="m-contraindicacoes"></p></div>
         </div>
 
-        <div class="accordion">
+        <div class="accordion" id="acc-efeitos">
           <button class="accordion__cabecalho">
             <span class="accordion__titulo">
               <i data-lucide="zap"></i> Efeitos adversos
