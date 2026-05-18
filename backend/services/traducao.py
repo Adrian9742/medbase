@@ -1,15 +1,79 @@
+import os
 import httpx
 
 # ─────────────────────────────────────────
 #  CONFIGURAÇÃO
 # ─────────────────────────────────────────
 
-URL_MYMEMORY     = "https://api.mymemory.translated.net/get"
-TIMEOUT_SEGUNDOS = 8
-MAX_CHARS        = 150  # só traduz campos curtos — nomes, títulos
+# Chave lida do ambiente — nunca hardcoded no código
+DEEPL_API_KEY = os.getenv("DEEPL_API_KEY", "")
 
-# Cache em memória — evita rechamar a API para o mesmo texto
+# Chaves terminando em :fx usam o endpoint gratuito
+# Chaves sem :fx usam o endpoint Pro
+URL_DEEPL = (
+    "https://api-free.deepl.com/v2/translate"
+    if DEEPL_API_KEY.endswith(":fx")
+    else "https://api.deepl.com/v2/translate"
+)
+
+URL_MYMEMORY  = "https://api.mymemory.translated.net/get"
+TIMEOUT       = 8
+MAX_CHARS     = 150  # só traduz campos curtos — nomes e títulos
+
+# Cache em memória — evita repetir chamadas para o mesmo texto
 _cache: dict[str, str] = {}
+
+
+# ─────────────────────────────────────────
+#  DEEPL
+# ─────────────────────────────────────────
+
+async def _traduzir_deepl(texto: str) -> str | None:
+    """
+    Chama a API do DeepL.
+    Retorna o texto traduzido ou None se falhar.
+    """
+    if not DEEPL_API_KEY:
+        return None  # chave não configurada — cai para fallback
+
+    try:
+        async with httpx.AsyncClient(timeout=TIMEOUT) as c:
+            r = await c.post(
+                URL_DEEPL,
+                headers={"Authorization": f"DeepL-Auth-Key {DEEPL_API_KEY}"},
+                json={
+                    "text":        [texto],
+                    "target_lang": "PT-BR",
+                    "source_lang": "EN",
+                }
+            )
+            if r.status_code != 200:
+                return None
+            dados = r.json()
+            return dados["translations"][0]["text"]
+    except Exception:
+        return None
+
+
+# ─────────────────────────────────────────
+#  MYMEMORY — fallback
+# ─────────────────────────────────────────
+
+async def _traduzir_mymemory(texto: str) -> str | None:
+    """Fallback gratuito sem chave."""
+    try:
+        async with httpx.AsyncClient(timeout=TIMEOUT) as c:
+            r = await c.get(URL_MYMEMORY, params={
+                "q": texto, "langpair": "en|pt-br"
+            })
+            if r.status_code != 200:
+                return None
+            traducao = r.json().get("responseData", {}).get("translatedText", "")
+            if not traducao or "PLEASE SELECT" in traducao.upper():
+                return None
+            return traducao
+    except Exception:
+        return None
 
 
 # ─────────────────────────────────────────
@@ -18,45 +82,36 @@ _cache: dict[str, str] = {}
 
 async def traduzir(texto: str) -> str:
     """
-    Traduz um texto curto de EN para PT-BR via MyMemory API.
+    Traduz texto curto EN → PT-BR.
 
-    Regras:
-    - Só traduz textos até MAX_CHARS caracteres (nomes, títulos)
-    - Usa cache para não repetir chamadas
-    - Retorna o texto original em caso de falha (fallback seguro)
-    - Nunca quebra o fluxo — erros são silenciosos
+    Ordem de prioridade:
+    1. Cache (sem chamada de rede)
+    2. DeepL (se DEEPL_API_KEY estiver configurada)
+    3. MyMemory (fallback gratuito)
+    4. Texto original (se tudo falhar — nunca quebra)
+
+    Só traduz textos até MAX_CHARS caracteres.
     """
-
     if not texto or not texto.strip():
         return texto
 
-    # Não traduz textos longos — para esses usar Wikipedia PT diretamente
     if len(texto) > MAX_CHARS:
-        return texto
+        return texto  # textos longos não são traduzidos aqui
 
-    # Retorna do cache se já foi traduzido antes
+    # Retorna do cache se já traduzido
     if texto in _cache:
         return _cache[texto]
 
-    try:
-        async with httpx.AsyncClient(timeout=TIMEOUT_SEGUNDOS) as cliente:
-            resposta = await cliente.get(URL_MYMEMORY, params={
-                "q":        texto,
-                "langpair": "en|pt-br",
-            })
+    # Tenta DeepL primeiro
+    resultado = await _traduzir_deepl(texto)
 
-            if resposta.status_code != 200:
-                return texto  # fallback: retorna original
+    # Fallback para MyMemory se DeepL falhou
+    if not resultado:
+        resultado = await _traduzir_mymemory(texto)
 
-            dados = resposta.json()
-            traducao = dados.get("responseData", {}).get("translatedText", "")
+    # Se tudo falhou, retorna o original
+    if not resultado:
+        return texto
 
-            # MyMemory retorna "PLEASE SELECT TWO DISTINCT LANGUAGES" em caso de erro
-            if not traducao or "PLEASE SELECT" in traducao.upper():
-                return texto
-
-            _cache[texto] = traducao
-            return traducao
-
-    except Exception:
-        return texto  # fallback seguro — nunca quebra a página
+    _cache[texto] = resultado
+    return resultado
