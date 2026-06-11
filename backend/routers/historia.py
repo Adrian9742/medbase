@@ -1,11 +1,15 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from services.wikipedia import buscar_artigo
+from services.traducao import traduzir_resumo
+from services import cache
+from limiter import limiter
 
 router = APIRouter(prefix="/api", tags=["História"])
 
 
 @router.get("/historia/{termo}")
-async def rota_historia(termo: str):
+@limiter.limit("10/minute")
+async def rota_historia(request: Request, termo: str):
 
     if not termo or not termo.strip():
         raise HTTPException(
@@ -13,8 +17,12 @@ async def rota_historia(termo: str):
             detail={"mensagem": "Termo não informado.", "code": "NOME_VAZIO"}
         )
 
+    chave = f"historia:{termo.lower().strip()}"
+    cached = cache.get(chave)
+    if cached:
+        return cached
+
     try:
-        # tipo="historia" → busca com contexto "medicina/medicine"
         resultado = await buscar_artigo(termo, tipo="historia")
     except Exception:
         raise HTTPException(
@@ -28,5 +36,9 @@ async def rota_historia(termo: str):
             detail={"mensagem": f"'{termo}' não encontrado.", "code": "NAO_ENCONTRADO"}
         )
 
+    if resultado.get("idioma") == "en" and resultado.get("resumo"):
+        resultado["resumo"] = await traduzir_resumo(resultado["resumo"])
+
     resultado["tipo"] = "historia"
+    cache.set(chave, resultado)
     return resultado

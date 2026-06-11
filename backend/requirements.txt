@@ -4,3 +4,4 @@ httpx
 aiosqlite
 wikipedia-api
 python-dotenv
+slowapi

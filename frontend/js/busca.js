@@ -122,7 +122,6 @@ async function executarBusca() {
     return
   }
 
-  // Valida tamanho máximo — evita abusos e queries inválidas
   if (termo.length > 100) {
     mostrarErro("Termo muito longo. Máximo de 100 caracteres.")
     return
@@ -132,6 +131,12 @@ async function executarBusca() {
   btnBuscar.textContent = "Buscando..."
   mensagemErro.classList.add("oculto")
 
+  // Avisa o usuário se o servidor demorar mais de 5s (cold start do Render)
+  const avisoFrio = setTimeout(() => {
+    mensagemErro.textContent = "O servidor está acordando, aguarde alguns segundos..."
+    mensagemErro.classList.remove("oculto")
+  }, 5000)
+
   try {
     let dados
     if (tipoAtual === "formula")     dados = await Api.buscarFormula(termo)
@@ -139,10 +144,9 @@ async function executarBusca() {
     if (tipoAtual === "doenca")      dados = await Api.buscarDoenca(termo)
     if (tipoAtual === "historia")    dados = await Api.buscarHistoria(termo)
 
-    // Salva no histórico
+    clearTimeout(avisoFrio)
     await Api.salvarHistorico(termo, tipoAtual).catch(() => {})
 
-    // Salva no sessionStorage para a página de destino usar
     sessionStorage.setItem("medbase_resultado", JSON.stringify(dados))
     sessionStorage.setItem("medbase_termo", termo)
     sessionStorage.setItem("medbase_tipo", tipoAtual)
@@ -150,8 +154,11 @@ async function executarBusca() {
     window.location.href = `${PAGINA_DESTINO[tipoAtual]}?tipo=${tipoAtual}&q=${encodeURIComponent(termo)}`
 
   } catch (erro) {
+    clearTimeout(avisoFrio)
     resetarBotao()
-    if (erro.message === "Failed to fetch") {
+    if (erro.message === "timeout") {
+      mostrarErro("O servidor demorou demais. Tente novamente em alguns instantes.")
+    } else if (erro.message === "Failed to fetch") {
       mostrarErro("Não foi possível conectar ao servidor. Verifique se o backend está rodando.")
     } else {
       mostrarErro(erro.message || "Erro ao buscar. Tente novamente.")

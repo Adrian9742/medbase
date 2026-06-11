@@ -88,6 +88,34 @@ def e_artigo_medico(resumo: str) -> bool:
     return True
 
 
+# Padrões que indicam que o artigo é sobre uma PESSOA (médico, cientista, etc.)
+# Usado para separar "Hipócrates" (historia) de "Diabetes" (doença)
+_PADROES_PESSOA = [
+    # PT
+    "foi um médico", "foi uma médica", "foi um cientista", "foi uma cientista",
+    "foi um filósofo", "foi um anatomista", "foi um cirurgião",
+    "foi um farmacêutico", "foi um biólogo", "foi um químico",
+    "é um médico", "é uma médica", "nasceu em", "nascido em",
+    # EN
+    "was a physician", "was an ancient", "was a greek", "was a roman",
+    "was a surgeon", "was a scientist", "was a biologist", "was a chemist",
+    "was a pharmacologist", "was a doctor", "was an anatomist",
+    "born in", "born on",
+]
+
+
+def e_pessoa_historica(resumo: str) -> bool:
+    """
+    Retorna True se o início do artigo indica que é sobre uma pessoa histórica.
+    Usa os primeiros 400 chars para não ser enganado por abreviações com ponto
+    (ex: 'ca. 460 a.C.' divide a frase antes de 'foi um médico').
+    """
+    if not resumo:
+        return False
+    trecho = resumo[:400].lower()
+    return any(p in trecho for p in _PADROES_PESSOA)
+
+
 # ─────────────────────────────────────────
 #  BUSCA DE PÁGINA — asyncio.to_thread (DC3)
 # ─────────────────────────────────────────
@@ -142,6 +170,16 @@ async def buscar_imagem(titulo: str, idioma: str = "pt") -> str | None:
 #  FUNÇÃO PRINCIPAL
 # ─────────────────────────────────────────
 
+def _extrair_secoes_sync(pagina, max_secoes: int = 4) -> list[dict]:
+    """Extrai as primeiras seções do artigo — roda dentro de to_thread."""
+    secoes = []
+    for s in pagina.sections[:max_secoes]:
+        texto = s.text.strip()
+        if texto and len(texto) > 80:
+            secoes.append({"titulo": s.title, "texto": texto})
+    return secoes
+
+
 async def buscar_artigo(termo: str, tipo: str = "doenca") -> dict | None:
     """
     Busca artigo médico na Wikipedia.
@@ -168,11 +206,15 @@ async def buscar_artigo(termo: str, tipo: str = "doenca") -> dict | None:
     for wiki, sufixos, idioma in ordem:
         pagina = await buscar_pagina(wiki, termo, sufixos)
         if pagina:
-            # Busca artigo e imagem em paralelo — reduz latência
-            imagem = await buscar_imagem(pagina.title, idioma)
+            # Busca imagem e seções em paralelo — reduz latência
+            imagem, secoes = await asyncio.gather(
+                buscar_imagem(pagina.title, idioma),
+                asyncio.to_thread(_extrair_secoes_sync, pagina),
+            )
             return {
                 "titulo":         pagina.title,
                 "resumo":         pagina.summary,
+                "secoes":         secoes,
                 "imagem_url":     imagem,
                 "link_wikipedia": pagina.fullurl,
                 "idioma":         idioma,

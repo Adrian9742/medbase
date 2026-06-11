@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MedBase — Enciclopédia médica</title>
+  <meta name="description" content="MedBase — busque fórmulas químicas, medicamentos, doenças e a história da medicina." />
+  <script>(function(){try{var t=localStorage.getItem('medbase:theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/components.css" />
+</head>
+<body data-page="home">
+  <div data-nav></div>
+
+  <main>
+    <section class="hero container">
+      <span class="hero__badge reveal"><i data-lucide="sparkles"></i> Enciclopédia médica e científica</span>
+      <h1 class="reveal" data-d="1">Conhecimento médico, <span class="accent">a uma busca de distância.</span></h1>
+      <p class="hero__sub reveal" data-d="2">Pesquise fórmulas químicas, medicamentos, doenças e marcos da história da medicina — tudo em um só lugar, rápido e bem organizado.</p>
+
+      <form class="search reveal" data-d="3" data-home-form role="search">
+        <div class="search__field">
+          <svg class="lead" data-lucide="search"></svg>
+          <input type="text" data-primary-search placeholder="Buscar fórmulas, medicamentos, doenças, história…" aria-label="Campo de busca" autocomplete="off" spellcheck="false" />
+          <button class="btn btn--primary search__submit" type="submit">Buscar</button>
+        </div>
+
+        <p class="search__hint">Pressione <span class="kbd">/</span> para buscar · a categoria é detectada automaticamente</p>
+
+        <div class="examples">
+          <button class="chip" type="button" data-example data-q="C6H12O6"><i data-lucide="flask-conical"></i>C6H12O6 <span class="examples__tag">Fórmula</span></button>
+          <button class="chip" type="button" data-example data-q="Aspirina"><i data-lucide="pill"></i>Aspirina <span class="examples__tag">Medicamento</span></button>
+          <button class="chip" type="button" data-example data-q="Diabetes"><i data-lucide="stethoscope"></i>Diabetes <span class="examples__tag">Doença</span></button>
+          <button class="chip" type="button" data-example data-q="Hipócrates"><i data-lucide="scroll-text"></i>Hipócrates <span class="examples__tag">História</span></button>
+        </div>
+      </form>
+
+      <div class="recent" data-home-recent></div>
+      <div class="recent" data-home-favorites></div>
+    </section>
+  </main>
+
+  <div data-footer></div>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="js/data.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/skeletons.js"></script>
+  <script src="js/pages.js"></script>
+</body>
+</html>

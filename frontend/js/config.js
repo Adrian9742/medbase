@@ -4,7 +4,9 @@
 // ─────────────────────────────────────────
 
 const CONFIG = {
-  API_URL: "https://medbase-bbct.onrender.com",
+  API_URL: (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
+    ? "http://localhost:8000"
+    : "https://medbase-bbct.onrender.com",
   TEMA_PADRAO:   "light",
   MAX_HISTORICO: 10,
 }

@@ -115,3 +115,30 @@ async def traduzir(texto: str) -> str:
 
     _cache[texto] = resultado
     return resultado
+
+
+async def traduzir_resumo(texto: str) -> str:
+    """
+    Traduz resumos longos EN → PT-BR via DeepL.
+    Só usa DeepL — MyMemory tem limite de caracteres por requisição.
+    Se DeepL não estiver configurado ou falhar, retorna o original.
+    Sem limite de caracteres — DeepL suporta textos longos.
+    """
+    if not texto or not texto.strip():
+        return texto
+
+    if not DEEPL_API_KEY:
+        return texto  # sem chave, retorna original
+
+    # Cache para resumos também
+    chave_cache = f"resumo:{hash(texto)}"
+    if chave_cache in _cache:
+        return _cache[chave_cache]
+
+    resultado = await _traduzir_deepl(texto)
+
+    if resultado:
+        _cache[chave_cache] = resultado
+        return resultado
+
+    return texto  # fallback seguro

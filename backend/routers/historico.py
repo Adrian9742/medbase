@@ -1,8 +1,15 @@
+import re
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from database.models import salvar_historico, buscar_historico, limpar_historico
 
 router = APIRouter(prefix="/api", tags=["Histórico"])
+
+TIPOS_VALIDOS = {"formula", "medicamento", "doenca", "historia"}
+
+
+def _sanitizar(texto: str) -> str:
+    return re.sub(r'[<>"\';&]', '', texto).strip()[:100]
 
 
 class ItemHistorico(BaseModel):
@@ -20,10 +27,14 @@ async def rota_buscar_historico():
 
 @router.post("/historico")
 async def rota_salvar_historico(item: ItemHistorico):
-    if not item.termo or not item.tipo:
+    termo = _sanitizar(item.termo)
+    tipo  = _sanitizar(item.tipo)
+
+    if not termo or tipo not in TIPOS_VALIDOS:
         raise HTTPException(status_code=400, detail={"mensagem": "Dados inválidos.", "code": "DADOS_INVALIDOS"})
+
     try:
-        await salvar_historico(item.termo, item.tipo)
+        await salvar_historico(termo, tipo)
         return {"ok": True}
     except Exception:
         raise HTTPException(status_code=503, detail={"mensagem": "Erro ao salvar histórico.", "code": "ERRO_INTERNO"})

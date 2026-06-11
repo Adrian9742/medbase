@@ -1,22 +1,28 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from services.pubchem import buscar_por_formula
+from services import cache
+from limiter import limiter
 
 router = APIRouter(prefix="/api", tags=["Fórmulas"])
 
 
 @router.get("/formula/{formula}")
-async def rota_formula(formula: str):
+@limiter.limit("10/minute")
+async def rota_formula(request: Request, formula: str):
 
-    # Validação: fórmula não pode ser vazia ou só espaços
     if not formula or not formula.strip():
         raise HTTPException(
             status_code=400,
             detail={"mensagem": "Fórmula não informada.", "code": "FORMULA_VAZIA"}
         )
 
+    chave = f"formula:{formula.upper().replace(' ', '')}"
+    cached = cache.get(chave)
+    if cached:
+        return cached
+
     try:
         resultado = await buscar_por_formula(formula)
-
     except Exception:
         raise HTTPException(
             status_code=503,
@@ -29,4 +35,5 @@ async def rota_formula(formula: str):
             detail={"mensagem": f"Fórmula '{formula}' não encontrada.", "code": "FORMULA_NAO_ENCONTRADA"}
         )
 
+    cache.set(chave, resultado)
     return resultado

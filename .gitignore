@@ -14,6 +14,11 @@ __pycache__/
 venv/
 .venv/
 
+# Logs de desenvolvimento
+backend_log.txt
+frontend_log.txt
+*.log
+
 # Sistema operacional
 .DS_Store
 Thumbs.db

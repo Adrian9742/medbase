@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Histórico de buscas — MedBase</title>
+  <script>(function(){try{var t=localStorage.getItem('medbase:theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/components.css" />
+</head>
+<body data-page="historico">
+  <div data-nav></div>
+
+  <main class="page">
+    <div class="container container-narrow">
+      <div class="crumbs reveal"><a href="index.html">Início</a><i data-lucide="chevron-right"></i><span>Histórico</span></div>
+      <header style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:26px">
+        <div class="reveal" data-d="1">
+          <h1 style="font-size:clamp(1.7rem,4vw,2.3rem);margin-bottom:6px">Histórico de buscas</h1>
+          <p style="color:var(--text-secondary)">Suas 10 buscas mais recentes neste dispositivo.</p>
+        </div>
+        <button class="btn btn--ghost reveal" data-d="1" type="button" data-clear-all><i data-lucide="trash-2"></i> Limpar histórico</button>
+      </header>
+
+      <section class="reveal" data-d="2" style="margin-bottom:34px">
+        <h2 class="section-label">Favoritos</h2>
+        <div data-fav-list></div>
+      </section>
+
+      <h2 class="section-label reveal" data-d="2">Buscas recentes</h2>
+      <div class="hist-list" data-hist></div>
+    </div>
+  </main>
+
+  <div data-footer></div>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/skeletons.js"></script>
+  <script src="js/pages.js"></script>
+</body>
+</html>
